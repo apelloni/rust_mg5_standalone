@@ -1,0 +1,11 @@
+[package]
+name = "rust_md5"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cxx = "1.0.137"
+libc = "0.2.169"
+
+[build-dependencies]
+cxx-build = "1.0.137"
