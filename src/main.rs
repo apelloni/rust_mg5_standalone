@@ -1,5 +1,7 @@
+use colored::Colorize;
 use cxx::CxxVector;
 use libc::{c_char, c_double, c_int};
+use rand::Rng;
 use std::{env, ffi::OsString, path::PathBuf, str};
 
 #[cxx::bridge]
@@ -29,6 +31,37 @@ mod ffi {
 //    type Id = cxx::type_id!("md5::MD5Integrand");
 //    type Kind = cxx::kind::Opaque;
 //}
+
+use std::time::{Duration, Instant};
+pub fn bench<F, T>(mut f: F, cycles: usize) -> (T, Duration, Duration)
+where
+    F: FnMut() -> T,
+{
+    let mut eval_time = vec![];
+    let mut start: Instant;
+    let mut end: Instant;
+    for _ in 0..cycles {
+        start = Instant::now();
+        f();
+        end = Instant::now();
+        eval_time.push(end.duration_since(start).as_nanos() as f32);
+    }
+    let res = f();
+
+    let mean: f32 = eval_time.iter().sum::<f32>() / cycles as f32;
+    let variance: f32 = eval_time
+        .iter()
+        .map(|value| {
+            let diff = mean - *value;
+            diff * diff
+        })
+        .sum::<f32>()
+        / cycles as f32;
+
+    let t_mean = Duration::from_nanos(mean as u64);
+    let t_std = Duration::from_nanos(variance.sqrt() as u64);
+    (res, t_mean, t_std)
+}
 
 fn main() {
     let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
@@ -60,4 +93,36 @@ fn main() {
     println!("ninitial = {}", md5_integrand.ninitial());
     println!("nexternal = {}", md5_integrand.nexternal());
     //(*md5_integrand).init();
+
+    /* ============================================
+     * START Benchmark
+     * ============================================*/
+    let n_samples = 100000;
+    let dimensions = 4 * md5_integrand.nexternal();
+
+    // Set random number generator
+    let mut rng = rand::rng();
+
+    // Evaluate multiple random points
+    let (res, t_mean, t_std) = bench(
+        || {
+            let p: Vec<f64> = (0..dimensions).map(|_| rng.random::<f64>()).collect();
+            unsafe {
+                md5_integrand
+                    .as_mut()
+                    .unwrap()
+                    .set_momenta(p.as_ptr(), p.len())
+            }
+            md5_integrand.as_mut().unwrap().get_matrix_element()
+        },
+        n_samples,
+    );
+
+    /* ============================================
+     * Print Report
+     * ============================================*/
+    let time_str = format!("{:?} +/- {:?} ({:E} samples)", t_mean, t_std, n_samples);
+    println!("{}: {}", "Evaluation time".bold(), time_str.green());
+    print!("{}: ", "Last result".bold());
+    println!("{}", res);
 }
