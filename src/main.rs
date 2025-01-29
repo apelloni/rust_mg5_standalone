@@ -25,6 +25,7 @@ mod ffi {
         fn ninitial(&self) -> usize;
         fn nexternal(&self) -> usize;
         fn nprocesses(&self) -> usize;
+        fn get_name(&self) -> &CxxString;
 
     }
 }
@@ -93,6 +94,10 @@ fn main() {
     println!("res = {res:.5e}");
     println!("ninitial = {}", md5_integrand.ninitial());
     println!("nexternal = {}", md5_integrand.nexternal());
+    println!(
+        "name = {}",
+        md5_integrand.get_name().to_str().unwrap().bold().yellow()
+    );
 
     /* ============================================
      * START Benchmark

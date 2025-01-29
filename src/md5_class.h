@@ -1,10 +1,11 @@
-#include <cstdio>
-#include <memory>
-#include <vector>
-
 #ifndef __MD5_CLASS__
 #define __MD5_CLASS__
+
 #include "CPPProcess.h"
+#include <cstdio>
+#include <memory>
+#include <string>
+#include <vector>
 
 class MD5Integrand {
 public:
@@ -21,10 +22,12 @@ public:
   size_t nexternal() const;
   size_t nprocesses() const;
   const double *get_masses() const;
+  const string &get_name() const;
 
 private:
   std::vector<double *> p;
   std::vector<double> m;
+  std::string name;
 };
 
 std::unique_ptr<MD5Integrand> new_md5_integrand();

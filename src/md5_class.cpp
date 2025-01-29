@@ -16,6 +16,7 @@ MD5Integrand::MD5Integrand() {}
 // Initialise process with corresponding process_card
 void MD5Integrand::init(const char *card_path) {
   process = CPPProcess();
+  name = process.name();
   printf("%s\n", card_path);
   process.initProc(card_path);
   // p.swap(std::vector<double *>(process.nexternal, {0.0, 0.0, 0.0, 0.0}))
@@ -30,13 +31,13 @@ void MD5Integrand::set_momenta(const double *moms, const size_t size) {
   for (size_t i = 0; i < size; i++)
     p[i / 4][i % 4] = moms[i];
 
-  //for (size_t i = 0; i < process.nexternal; i++) {
-  //  cout << "TMP: " << setw(4) << i + 1;
-  //  cout << setiosflags(ios::scientific) << setw(14) << p[i][0];
-  //  cout << setiosflags(ios::scientific) << setw(14) << p[i][1];
-  //  cout << setiosflags(ios::scientific) << setw(14) << p[i][2];
-  //  cout << setiosflags(ios::scientific) << setw(14) << p[i][3] << endl;
-  //}
+  // for (size_t i = 0; i < process.nexternal; i++) {
+  //   cout << "TMP: " << setw(4) << i + 1;
+  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][0];
+  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][1];
+  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][2];
+  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][3] << endl;
+  // }
   process.setMomenta(p);
 }
 
@@ -48,7 +49,11 @@ double MD5Integrand::get_matrix_element() {
 }
 
 // Return masses
-const double *MD5Integrand::get_masses() const { return &process.getMasses()[0]; }
+const double *MD5Integrand::get_masses() const {
+  return &process.getMasses()[0];
+}
+
+const string &MD5Integrand::get_name() const { return name; }
 
 // Return internal constants for the array limits
 size_t MD5Integrand::ninitial() const { return process.ninitial; }
