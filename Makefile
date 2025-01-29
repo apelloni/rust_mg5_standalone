@@ -9,7 +9,7 @@ lib/libmodel_sm_ma.a:
 	ln -sf ./../standalone_uubar_aag/lib/libmodel_sm_ma.a $@
 
 $(PROCESS):
-	./.venv/bin/python $(MD5) ../$@.mg5
+	./.venv/bin/python $(MD5) cards/$@.mg5
 
 src/md5_class.o: src/md5_class.cpp $(PROCESS)
 	g++ -o $@ -c src/md5_class.cpp -fPIC -I$(PROCESS)/SubProcesses/P1_Sigma_sm_ma_uux_aag/ -I$(PROCESS)/src/
