@@ -12,3 +12,9 @@ python -m venv .venv
 source .venv/bin/activate
 pip instal six
 ```
+
+Different processes can be accessed by writing the corresponding card provided that
+**the card has the same name as the folder!**
+```
+make -e PROCESS=standalone_uubar_aag_ddbar
+```

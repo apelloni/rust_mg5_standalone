@@ -64,7 +64,8 @@ where
 }
 
 fn main() {
-    let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
+    //let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
+    let card_path = "./standalone_uubar_aag_ddbar/Cards/param_card.dat";
     let mut md5_integrand = ffi::new_md5_integrand();
     assert!(md5_integrand.nprocesses() == 1);
 
