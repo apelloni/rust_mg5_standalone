@@ -1,0 +1,14 @@
+#########################################
+# Generate processes
+
+# Import model with massive photons
+import model sm_ma
+
+# Generate Process
+generate u u~ > a a g
+
+# Define output folder
+output standalone_cpp standalone_uubar_aag
+
+# Look at the diagrams
+display diagrams ./standalone_uubar_aag
