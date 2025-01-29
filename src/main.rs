@@ -1,6 +1,9 @@
 use colored::Colorize;
 use rand::Rng;
+use std::time::{Duration, Instant};
 
+/// Bridge to the standalone CPP library from MadGraph5
+/// It allows to set the momenenta and evaluate the matrix_element
 #[cxx::bridge]
 mod ffi {
 
@@ -26,12 +29,9 @@ mod ffi {
     }
 }
 
-//unsafe impl cxx::ExternType for ffi::MD5Integrand {
-//    type Id = cxx::type_id!("md5::MD5Integrand");
-//    type Kind = cxx::kind::Opaque;
-//}
-
-use std::time::{Duration, Instant};
+/// Benchmarking Function for the estimation of the evaluation time
+/// for a given number of evaluation it returns the mean execution time
+/// together with the standard deviation
 pub fn bench<F, T>(mut f: F, cycles: usize) -> (T, Duration, Duration)
 where
     F: FnMut() -> T,
