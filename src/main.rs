@@ -1,8 +1,5 @@
 use colored::Colorize;
-use cxx::CxxVector;
-use libc::{c_char, c_double, c_int};
 use rand::Rng;
-use std::{env, ffi::OsString, path::PathBuf, str};
 
 #[cxx::bridge]
 mod ffi {
@@ -13,9 +10,11 @@ mod ffi {
         type MD5Integrand;
 
         fn new_md5_integrand() -> UniquePtr<MD5Integrand>;
-        //fn init(self: Pin<&mut MD5Integrand>);
-        //fn init(self: Pin<&mut MD5Integrand>, );
+
+        // Initialize with parameter_card
         unsafe fn init(self: Pin<&mut MD5Integrand>, card_path: *const c_char);
+
+        // Compute x-section
         unsafe fn set_momenta(self: Pin<&mut MD5Integrand>, data: *const f64, size: usize);
         fn get_matrix_element(self: Pin<&mut MD5Integrand>) -> f64;
 
@@ -66,7 +65,9 @@ where
 fn main() {
     let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
     let mut md5_integrand = ffi::new_md5_integrand();
+    assert!(md5_integrand.nprocesses() == 1);
 
+    // Import Parameter Card
     unsafe {
         let c_path = std::ffi::CString::new(card_path).unwrap();
         md5_integrand.as_mut().unwrap().init(c_path.as_ptr());
@@ -92,7 +93,6 @@ fn main() {
     println!("res = {res:.5e}");
     println!("ninitial = {}", md5_integrand.ninitial());
     println!("nexternal = {}", md5_integrand.nexternal());
-    //(*md5_integrand).init();
 
     /* ============================================
      * START Benchmark
