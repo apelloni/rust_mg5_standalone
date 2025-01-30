@@ -8,7 +8,7 @@ use std::time::{Duration, Instant};
 mod ffi {
 
     unsafe extern "C++" {
-        include!("md5_class.h");
+        include!("mg5_class.h");
 
         type MG5Integrand;
 

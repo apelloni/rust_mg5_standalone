@@ -19,7 +19,7 @@ fn main() {
         src_dir.join("lib").to_str().unwrap()
     );
     // Link Flags
-    println!("cargo:rustc-link-lib=md5_class",);
+    println!("cargo:rustc-link-lib=mg5_class",);
     println!("cargo:rustc-link-lib=model_sm_ma",);
 
     // Update envoiraments paths
