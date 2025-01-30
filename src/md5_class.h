@@ -1,5 +1,5 @@
-#ifndef __MD5_CLASS__
-#define __MD5_CLASS__
+#ifndef __MG5_CLASS__
+#define __MG5_CLASS__
 
 #include "CPPProcess.h"
 #include <cstdio>
@@ -7,11 +7,11 @@
 #include <string>
 #include <vector>
 
-class MD5Integrand {
+class MG5Integrand {
 public:
   CPPProcess process;
   // Constructor
-  MD5Integrand();
+  MG5Integrand();
   void init(const char *card_path);
   // void init();
   void set_momenta(const double *moms, const size_t size);
@@ -30,6 +30,6 @@ private:
   std::string name;
 };
 
-std::unique_ptr<MD5Integrand> new_md5_integrand();
+std::unique_ptr<MG5Integrand> new_mg5_integrand();
 
 #endif

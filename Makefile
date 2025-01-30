@@ -1,6 +1,6 @@
 CC=g++ -O3
 
-MD5=/home/andrea/Programs/MG5_aMC_v3_5_4/bin/mg5_aMC
+MG5=/home/andrea/Programs/MG5_aMC_v3_5_4/bin/mg5_aMC
 PROCESS=standalone_uubar_aag
 
 sources=src/CPPProcess.h src/Parameters_sm_ma.h src/read_slha.h
@@ -12,7 +12,7 @@ lib/libmodel_sm_ma.a:
 	ln -sf ./../$(PROCESS)/lib/libmodel_sm_ma.a $@
 
 $(PROCESS):
-	./.venv/bin/python $(MD5) cards/$@.mg5
+	./.venv/bin/python $(MG5) cards/$@.mg5
 
 src/md5_class.o: src/md5_class.cpp $(PROCESS) $(sources)
 	$(CC) -o $@ -c src/md5_class.cpp -fPIC -Isrc/

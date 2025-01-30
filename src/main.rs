@@ -10,16 +10,16 @@ mod ffi {
     unsafe extern "C++" {
         include!("md5_class.h");
 
-        type MD5Integrand;
+        type MG5Integrand;
 
-        fn new_md5_integrand() -> UniquePtr<MD5Integrand>;
+        fn new_mg5_integrand() -> UniquePtr<MG5Integrand>;
 
         // Initialize with parameter_card
-        unsafe fn init(self: Pin<&mut MD5Integrand>, card_path: *const c_char);
+        unsafe fn init(self: Pin<&mut MG5Integrand>, card_path: *const c_char);
 
         // Compute x-section
-        unsafe fn set_momenta(self: Pin<&mut MD5Integrand>, data: *const f64, size: usize);
-        fn get_matrix_element(self: Pin<&mut MD5Integrand>) -> f64;
+        unsafe fn set_momenta(self: Pin<&mut MG5Integrand>, data: *const f64, size: usize);
+        fn get_matrix_element(self: Pin<&mut MG5Integrand>) -> f64;
 
         // Consts used for internal array limits
         fn ninitial(&self) -> usize;
@@ -66,13 +66,13 @@ where
 fn main() {
     //let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
     let card_path = "./standalone_uubar_aag_ddbar/Cards/param_card.dat";
-    let mut md5_integrand = ffi::new_md5_integrand();
-    assert!(md5_integrand.nprocesses() == 1);
+    let mut mg5_integrand = ffi::new_mg5_integrand();
+    assert!(mg5_integrand.nprocesses() == 1);
 
     // Import Parameter Card
     unsafe {
         let c_path = std::ffi::CString::new(card_path).unwrap();
-        md5_integrand.as_mut().unwrap().init(c_path.as_ptr());
+        mg5_integrand.as_mut().unwrap().init(c_path.as_ptr());
     }
 
     // Set Momenta
@@ -86,25 +86,25 @@ fn main() {
     // Flatten data
     let p_data: Vec<f64> = moms.into_iter().flatten().collect();
     unsafe {
-        md5_integrand
+        mg5_integrand
             .as_mut()
             .unwrap()
             .set_momenta(p_data.as_ptr(), p_data.len())
     }
-    let res = md5_integrand.as_mut().unwrap().get_matrix_element();
+    let res = mg5_integrand.as_mut().unwrap().get_matrix_element();
     println!("res = {res:.5e}");
-    println!("ninitial = {}", md5_integrand.ninitial());
-    println!("nexternal = {}", md5_integrand.nexternal());
+    println!("ninitial = {}", mg5_integrand.ninitial());
+    println!("nexternal = {}", mg5_integrand.nexternal());
     println!(
         "name = {}",
-        md5_integrand.get_name().to_str().unwrap().bold().yellow()
+        mg5_integrand.get_name().to_str().unwrap().bold().yellow()
     );
 
     /* ============================================
      * START Benchmark
      * ============================================*/
     let n_samples = 100000;
-    let dimensions = 4 * md5_integrand.nexternal();
+    let dimensions = 4 * mg5_integrand.nexternal();
 
     // Set random number generator
     let mut rng = rand::rng();
@@ -114,12 +114,12 @@ fn main() {
         || {
             let p: Vec<f64> = (0..dimensions).map(|_| rng.random::<f64>()).collect();
             unsafe {
-                md5_integrand
+                mg5_integrand
                     .as_mut()
                     .unwrap()
                     .set_momenta(p.as_ptr(), p.len())
             }
-            md5_integrand.as_mut().unwrap().get_matrix_element()
+            mg5_integrand.as_mut().unwrap().get_matrix_element()
         },
         n_samples,
     );
