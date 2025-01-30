@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include "md5_class.h"
+#include "mg5_class.h"
 
 // Return a unique pointer to the MG5Integrand class
 std::unique_ptr<MG5Integrand> new_mg5_integrand() {
