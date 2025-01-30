@@ -2,33 +2,7 @@ use colored::Colorize;
 use rand::Rng;
 use std::time::{Duration, Instant};
 
-/// Bridge to the standalone CPP library from MadGraph5
-/// It allows to set the momenenta and evaluate the matrix_element
-#[cxx::bridge]
-mod ffi {
-
-    unsafe extern "C++" {
-        include!("mg5_class.h");
-
-        type MG5Integrand;
-
-        fn new_mg5_integrand() -> UniquePtr<MG5Integrand>;
-
-        // Initialize with parameter_card
-        unsafe fn init(self: Pin<&mut MG5Integrand>, card_path: *const c_char);
-
-        // Compute x-section
-        unsafe fn set_momenta(self: Pin<&mut MG5Integrand>, data: *const f64, size: usize);
-        fn get_matrix_element(self: Pin<&mut MG5Integrand>) -> f64;
-
-        // Consts used for internal array limits
-        fn ninitial(&self) -> usize;
-        fn nexternal(&self) -> usize;
-        fn nprocesses(&self) -> usize;
-        fn get_name(&self) -> &CxxString;
-
-    }
-}
+use rust_mg5::RustMG5;
 
 /// Benchmarking Function for the estimation of the evaluation time
 /// for a given number of evaluation it returns the mean execution time
@@ -64,16 +38,11 @@ where
 }
 
 fn main() {
+    let mut mg5_integrand = RustMG5::default();
+
     //let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
     let card_path = "./standalone_uubar_aag_ddbar/Cards/param_card.dat";
-    let mut mg5_integrand = ffi::new_mg5_integrand();
-    assert!(mg5_integrand.nprocesses() == 1);
-
-    // Import Parameter Card
-    unsafe {
-        let c_path = std::ffi::CString::new(card_path).unwrap();
-        mg5_integrand.as_mut().unwrap().init(c_path.as_ptr());
-    }
+    mg5_integrand.set_card(card_path);
 
     // Set Momenta
     let moms: Vec<[f64; 4]> = vec![
@@ -83,28 +52,20 @@ fn main() {
         [4.733171e+03, -2.382594e+02, -4.519608e+03, 1.382377e+03],
         [2.305330e+03, -1.964365e+03, -4.152913e+02, 1.132850e+03],
     ];
-    // Flatten data
-    let p_data: Vec<f64> = moms.into_iter().flatten().collect();
-    unsafe {
-        mg5_integrand
-            .as_mut()
-            .unwrap()
-            .set_momenta(p_data.as_ptr(), p_data.len())
-    }
-    let res = mg5_integrand.as_mut().unwrap().get_matrix_element();
+    let moms_flat: Vec<f64> = moms.into_iter().flatten().collect();
+
+    mg5_integrand.set_externals(&moms_flat);
+    let res = mg5_integrand.evaluate();
     println!("res = {res:.5e}");
-    println!("ninitial = {}", mg5_integrand.ninitial());
-    println!("nexternal = {}", mg5_integrand.nexternal());
-    println!(
-        "name = {}",
-        mg5_integrand.get_name().to_str().unwrap().bold().yellow()
-    );
+    println!("ninitial = {}", mg5_integrand.n_initials());
+    println!("nexternal = {}", mg5_integrand.n_externals());
+    println!("name = {}", mg5_integrand.name().bold().yellow());
 
     /* ============================================
      * START Benchmark
      * ============================================*/
     let n_samples = 100000;
-    let dimensions = 4 * mg5_integrand.nexternal();
+    let dimensions = 4 * mg5_integrand.n_externals();
 
     // Set random number generator
     let mut rng = rand::rng();
@@ -113,13 +74,8 @@ fn main() {
     let (res, t_mean, t_std) = bench(
         || {
             let p: Vec<f64> = (0..dimensions).map(|_| rng.random::<f64>()).collect();
-            unsafe {
-                mg5_integrand
-                    .as_mut()
-                    .unwrap()
-                    .set_momenta(p.as_ptr(), p.len())
-            }
-            mg5_integrand.as_mut().unwrap().get_matrix_element()
+            mg5_integrand.set_externals(&p);
+            mg5_integrand.evaluate()
         },
         n_samples,
     );

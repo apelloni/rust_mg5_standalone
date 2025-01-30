@@ -2,7 +2,7 @@ use std::{env, ffi::OsString, path::PathBuf, str};
 
 fn main() {
     // Bridge CPP standalone to Rust
-    cxx_build::bridge("src/main.rs")
+    cxx_build::bridge("src/lib.rs")
         .include("./src/")
         .opt_level(3)
         .compile("cxx-demo");

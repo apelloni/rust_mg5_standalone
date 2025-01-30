@@ -3,6 +3,9 @@ name = "rust_md5"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "rust_mg5"
+
 [dependencies]
 colored = "3.0.0"
 cxx = "1.0.137"
