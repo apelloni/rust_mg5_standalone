@@ -1,9 +1,7 @@
-#include <cstdio>
-#include <iomanip>
-#include <iostream>
-#include <vector>
-
 #include "mg5_class.h"
+#include <cstdio>
+
+namespace MG5_NAMESPACE {
 
 // Return a unique pointer to the MG5Integrand class
 std::unique_ptr<MG5Integrand> new_mg5_integrand() {
@@ -15,7 +13,7 @@ MG5Integrand::MG5Integrand() {}
 
 // Initialise process with corresponding process_card
 void MG5Integrand::init(const char *card_path) {
-  process = CPPProcess();
+  process = _CPPProcess();
   name = process.name();
   printf("%s\n", card_path);
   process.initProc(card_path);
@@ -53,9 +51,10 @@ const double *MG5Integrand::get_masses() const {
   return &process.getMasses()[0];
 }
 
-const string &MG5Integrand::get_name() const { return name; }
+const std::string &MG5Integrand::get_name() const { return name; }
 
 // Return internal constants for the array limits
 size_t MG5Integrand::ninitial() const { return process.ninitial; }
 size_t MG5Integrand::nexternal() const { return process.nexternal; }
 size_t MG5Integrand::nprocesses() const { return process.nprocesses; }
+} // namespace MG5_NAMESPACE

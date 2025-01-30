@@ -1,10 +1,12 @@
 [package]
-name = "rust_md5"
+name = "rust_mg5"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
 name = "rust_mg5"
+#crate-type = ["dylib"]
+
 
 [dependencies]
 colored = "3.0.0"

@@ -1,15 +1,17 @@
 #ifndef __MG5_CLASS__
 #define __MG5_CLASS__
 
-#include "CPPProcess.h"
 #include <cstdio>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "CPPProcess.h"
+
+namespace MG5_NAMESPACE {
 class MG5Integrand {
 public:
-  CPPProcess process;
+  _CPPProcess process;
   // Constructor
   MG5Integrand();
   void init(const char *card_path);
@@ -31,5 +33,5 @@ private:
 };
 
 std::unique_ptr<MG5Integrand> new_mg5_integrand();
-
+} // namespace MG5_NAMESPACE
 #endif

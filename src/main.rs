@@ -2,7 +2,7 @@ use colored::Colorize;
 use rand::Rng;
 use std::time::{Duration, Instant};
 
-use rust_mg5::RustMG5;
+use rust_mg5::uux_aag::RustMG5;
 
 /// Benchmarking Function for the estimation of the evaluation time
 /// for a given number of evaluation it returns the mean execution time
@@ -41,7 +41,7 @@ fn main() {
     let mut mg5_integrand = RustMG5::default();
 
     //let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
-    let card_path = "./standalone_uubar_aag_ddbar/Cards/param_card.dat";
+    let card_path = "./standalone_sm_ma/Cards/param_card.dat";
     mg5_integrand.set_card(card_path);
 
     // Set Momenta

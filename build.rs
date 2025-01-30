@@ -2,10 +2,22 @@ use std::{env, ffi::OsString, path::PathBuf, str};
 
 fn main() {
     // Bridge CPP standalone to Rust
-    cxx_build::bridge("src/lib.rs")
+    cxx_build::bridge("src/uux_aa.rs")
         .include("./src/")
         .opt_level(3)
-        .compile("cxx-demo");
+        .compile("rmg5-uux_aa");
+
+    // Bridge CPP standalone to Rust
+    cxx_build::bridge("src/uux_aag.rs")
+        .include("./src/")
+        .opt_level(3)
+        .compile("rmg5-uux_aag");
+
+    // Bridge CPP standalone to Rust
+    cxx_build::bridge("src/uux_aaddx.rs")
+        .include("./src/")
+        .opt_level(3)
+        .compile("rmg5-uux_aaddx");
 
     println!("cargo:rerun-if-changed=./lib/libmd5_class.so");
     println!("cargo:rerun-if-changed=./lib/libmodel_sm_ma.a");
@@ -19,7 +31,7 @@ fn main() {
         src_dir.join("lib").to_str().unwrap()
     );
     // Link Flags
-    println!("cargo:rustc-link-lib=mg5_class",);
+    println!("cargo:rustc-link-lib=rmg5",);
     println!("cargo:rustc-link-lib=model_sm_ma",);
 
     // Update envoiraments paths

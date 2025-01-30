@@ -5,10 +5,12 @@
 import model sm_ma
 
 # Generate Process
-generate u u~ > a a g
+generate u u~ > a a
+add process u u~ > a a g
+add process u u~ > a a g , (g > d d~)
 
 # Define output folder
-output standalone_cpp standalone_uubar_aag
+output standalone_cpp standalone_sm_ma
 
 # Look at the diagrams
-display diagrams ./standalone_uubar_aag
+display diagrams ./standalone_sm_ma
