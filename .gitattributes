@@ -1,2 +1,2 @@
 # Exclude MG5 from linguist stats
-MG5_aMC_*/ linguist-vendored
+MG5_aMC_*/** linguist-vendored
