@@ -13,4 +13,4 @@ add process u u~ > a a g , (g > d d~)
 output standalone_cpp standalone_sm_ma
 
 # Look at the diagrams
-display diagrams ./standalone_sm_ma
+# display diagrams ./standalone_sm_ma

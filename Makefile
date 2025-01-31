@@ -13,7 +13,6 @@ all: $(patsubst %, src/cpp/CPP_%.h, $(PROCESSES)) \
 	 lib/libmodel_sm_ma.a
 
 lib/librmg5.so: $(patsubst %, src/cpp/mg5_%.o, $(PROCESSES))
-	echo "$^"
 	mkdir -p lib/
 	$(eval CPP_SRC=$(wildcard $(PROCESSES_DIR)/SubProcesses/P*_Sigma_*/CPPProcess.o))
 	$(CC) --shared -fPIC -o lib/librmg5.so $^ $(CPP_SRC)
@@ -24,7 +23,8 @@ lib/libmodel_sm_ma.a:
 $(PROCESSES_DIR):
 	./.venv/bin/python $(MG5) cards/$@.mg5
 
-src/cpp/mg5_%.o: src/mg5_class.cpp $(PROCESSES_DIR) $(sources)
+src/cpp/mg5_%.o: src/mg5_class.cpp $(PROCESSES_DIR) src/cpp/CPP_%.h  $(sources)
+	mkdir -p cpp/
 	sed -e "s/MG5_NAMESPACE/MG5_$*/g" \
 		-e "s/mg5_class.h/mg5_$*.h/" \
 		-e "s/_CPPProcess/CPP_$*/" src/mg5_class.cpp > src/cpp/mg5_$*.cpp
@@ -39,15 +39,16 @@ lib/libmg5_%.so: src/cpp/mg5_%.o $(sources) src/cpp/CPP_%.h
 	$(eval CPP_DIR=$(PROCESSES_DIR)/SubProcesses/P*_Sigma_$*/)
 	make -C $(CPP_DIR) CPPProcess.o
 	$(CC) --shared -fPIC -o $@ src/cpp/mg5_$*.o $(CPP_DIR)/CPPProcess.o
-	echo "AAAA"
 
 src/cpp/CPP_%.h:
+	mkdir -p cpp/
 	$(eval CPP_DIR=$(PROCESSES_DIR)/SubProcesses/P*_Sigma_$*/)
 	sed -i "s/CPPProcess\([^.]\)/CPP_$*\1/g" $(CPP_DIR)/CPPProcess.cc
 	sed -i "s/CPPProcess/CPP_$*/g" $(CPP_DIR)/CPPProcess.h
 	cp ./$(PROCESSES_DIR)/SubProcesses/P*_Sigma_$*/CPPProcess.h $@
 
  $(sources):
+	mkdir -p cpp/
 	cp ./$(PROCESSES_DIR)/src/Parameters_sm_ma.h src/cpp/.
 	cp ./$(PROCESSES_DIR)/src/read_slha.h src/cpp/.
 
