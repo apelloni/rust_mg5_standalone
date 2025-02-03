@@ -1,14 +1,18 @@
+use flate2::read::GzDecoder;
 use std::process::{Command, Stdio};
 use std::{env, ffi::OsString, path::PathBuf, str};
+use tar::Archive;
 
+const MG5_TAR: &str = "mg5/MG5_aMC_v3.5.7.tar.gz";
 const MG5_DIR: &str = "MG5_aMC_v3_5_7";
 const _MG5_VER: &str = "3.5.7";
-const MG5_CMD: &str = "cards/standalone_sm_ma.mg5";
+const MG5_CMD: &str = "mg5/cards/standalone_sm_ma.mg5";
 const STANDALONE_DIR: &str = "standalone_sm_ma";
 
 struct Environment {
     src_dir: PathBuf,
-    _mg5_dir: PathBuf,
+    mg5_tar: PathBuf,
+    mg5_dir: PathBuf,
     mg5_bin: PathBuf,
     py_venv: PathBuf,
     python: PathBuf,
@@ -22,7 +26,8 @@ fn main() -> Result<(), std::io::Error> {
     // Set environment variables
     let env = Environment {
         src_dir: src_dir.clone(),
-        _mg5_dir: src_dir.join(MG5_DIR),
+        mg5_tar: src_dir.join(MG5_TAR),
+        mg5_dir: src_dir.join(MG5_DIR),
         mg5_bin: src_dir.join(MG5_DIR).join("bin/mg5_aMC"),
         py_venv: src_dir.join(".venv"),
         python: src_dir.join(".venv/bin/python"),
@@ -31,6 +36,8 @@ fn main() -> Result<(), std::io::Error> {
 
     // Don't run if the standalone folder already exists
     if !env.src_dir.join(STANDALONE_DIR).exists() {
+        // Unpack MG5 if necessary
+        unpack_mg5(&env);
         // Check the python envoirament
         check_python_version().unwrap();
         create_python_venv(&env)?;
@@ -200,5 +207,28 @@ fn make_clean(env: &Environment) {
 
     if !status.success() {
         eprintln!("Command failed with status: {}", status);
+    }
+}
+
+fn unpack_mg5(env: &Environment) {
+    // Unpack tar.gz
+    if !env.mg5_dir.exists() {
+        let tar = std::fs::File::open(env.mg5_tar.clone()).unwrap();
+        let dec = GzDecoder::new(tar);
+        let mut a = Archive::new(dec);
+        a.unpack("./").unwrap();
+        // Copy model folder
+        let mut child = Command::new("cp")
+            .arg("-r")
+            .args([env.src_dir.join("mg5/sm_ma"), env.mg5_dir.join("models/.")])
+            .stdout(Stdio::inherit()) // Inherit stdout (print directly)
+            .stderr(Stdio::inherit()) // Inherit stderr (print errors directly)
+            .spawn()
+            .expect("Failed to start command");
+        // Wait for the command to complete
+        let status = child.wait().expect("Failed to wait for process");
+        if !status.success() {
+            eprintln!("Command failed with status: {}", status);
+        }
     }
 }
