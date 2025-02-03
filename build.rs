@@ -83,12 +83,17 @@ fn main() -> Result<(), std::io::Error> {
     println!("cargo:rustc-link-lib=rmg5",);
     println!("cargo:rustc-link-lib=model_sm_ma",);
 
-    // Update envoiraments paths
     println!(
-        "cargo:rustc-env=LD_LIBRARY_PATH={}:{}",
-        src_dir.join("lib/").to_str().unwrap(),
-        ld_path.to_str().unwrap()
+        "cargo:rustc-link-arg=-Wl,-rpath,{}",
+        src_dir.join("lib/").to_str().unwrap()
     );
+
+    // Update envoiraments paths
+    //println!(
+    //    "cargo:rustc-env=LD_LIBRARY_PATH={}:{}",
+    //    src_dir.join("lib/").to_str().unwrap(),
+    //    ld_path.to_str().unwrap()
+    //);
 
     Ok(())
 }
