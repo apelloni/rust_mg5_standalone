@@ -22,7 +22,7 @@ void MG5Integrand::init(const char *card_path) {
   // Create CPPProcess and set card parameters
   process = _CPPProcess();
   name = process.name();
-  printf("%s\n", card_path);
+  //printf("%s\n", card_path);
   process.initProc(card_path);
   // p.swap(std::vector<double *>(process.nexternal, {0.0, 0.0, 0.0, 0.0}))
   for (int i = 0; i < process.nexternal; i++) {
