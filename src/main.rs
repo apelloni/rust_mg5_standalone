@@ -38,11 +38,10 @@ where
 }
 
 fn main() {
-    let mut mg5_integrand = RustMG5::default();
-
-    //let card_path = "./standalone_uubar_aag/Cards/param_card.dat";
+    // Initialize MG5
     let card_path = "./standalone_sm_ma/Cards/param_card.dat";
-    mg5_integrand.set_card(card_path);
+    let mut mg5_integrand= RustMG5::init(card_path);
+    //println!("====\n{}====\n",mg5_integrand.cout());
 
     // Set Momenta
     let moms: Vec<[f64; 4]> = vec![

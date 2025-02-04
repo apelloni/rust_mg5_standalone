@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include "CPPProcess.h"
 
@@ -24,12 +25,19 @@ public:
   size_t nexternal() const;
   size_t nprocesses() const;
   const double *get_masses() const;
-  const string &get_name() const;
+  const std::string &get_name() const;
+
+  // Get cout
+  const std::string & read_cout();
 
 private:
   std::vector<double *> p;
   std::vector<double> m;
   std::string name;
+  // cout redirect
+  std::stringstream buffer;
+  std::streambuf *old;
+  std::string cout;
 };
 
 std::unique_ptr<MG5Integrand> new_mg5_integrand();
