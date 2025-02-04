@@ -1,4 +1,6 @@
 #include "mg5_class.h"
+//#include <iomanip>
+//#include <iostream>
 #include <cstdio>
 
 namespace MG5_NAMESPACE {
@@ -29,13 +31,13 @@ void MG5Integrand::set_momenta(const double *moms, const size_t size) {
   for (size_t i = 0; i < size; i++)
     p[i / 4][i % 4] = moms[i];
 
-  // for (size_t i = 0; i < process.nexternal; i++) {
-  //   cout << "TMP: " << setw(4) << i + 1;
-  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][0];
-  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][1];
-  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][2];
-  //   cout << setiosflags(ios::scientific) << setw(14) << p[i][3] << endl;
-  // }
+   //for (size_t i = 0; i < process.nexternal; i++) {
+   //    std::cout << "TMP: " << std::setw(4) << i + 1;
+   //    std::cout << setiosflags(std::ios::scientific) << std::setw(14) << p[i][0];
+   //    std::cout << setiosflags(std::ios::scientific) << std::setw(14) << p[i][1];
+   //    std::cout << setiosflags(std::ios::scientific) << std::setw(14) << p[i][2];
+   //    std::cout << setiosflags(std::ios::scientific) << std::setw(14) << p[i][3] << std::endl;
+   //}
   process.setMomenta(p);
 }
 

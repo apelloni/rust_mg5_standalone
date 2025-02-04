@@ -15,7 +15,11 @@ all: $(patsubst %, src/cpp/CPP_%.h, $(PROCESSES)) \
 lib/librmg5.so: $(patsubst %, src/cpp/mg5_%.o, $(PROCESSES))
 	mkdir -p lib/
 	$(eval CPP_SRC=$(wildcard $(PROCESSES_DIR)/SubProcesses/P*_Sigma_*/CPPProcess.o))
-	$(CC) --shared -fPIC -o lib/librmg5.so $^ $(CPP_SRC)
+	$(CC) --shared -fPIC -o $@ $^ $(CPP_SRC)
+
+lib/librmg5.a: $(patsubst %, src/cpp/mg5_%.o, $(PROCESSES))
+	$(eval CPP_SRC=$(wildcard $(PROCESSES_DIR)/SubProcesses/P*_Sigma_*/CPPProcess.o))
+	ar rcs -o $@ $^ $(CPP_SRC)
 
 lib/libmodel_sm_ma.a:
 	ln -sf ./../$(PROCESSES_DIR)/lib/libmodel_sm_ma.a $@

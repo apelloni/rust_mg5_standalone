@@ -21,7 +21,7 @@ struct Environment {
 
 fn main() -> Result<(), std::io::Error> {
     let src_dir = PathBuf::from(cargo_env("CARGO_MANIFEST_DIR"));
-    let ld_path = env::var_os("LD_LIBRARY_PATH").unwrap();
+    let _ld_path = env::var_os("LD_LIBRARY_PATH").unwrap();
 
     // Set environment variables
     let env = Environment {
@@ -71,22 +71,26 @@ fn main() -> Result<(), std::io::Error> {
         .compile("rmg5-uux_aaddx");
 
     // Link libraries
-    println!("cargo:rerun-if-changed=./lib/libmd5_class.so");
+    println!("cargo:rerun-if-changed=./lib/libmd5_class.a");
     println!("cargo:rerun-if-changed=./lib/libmodel_sm_ma.a");
 
     // Libraries directory
     println!(
-        "cargo:rustc-link-search={}",
+        "cargo:lib_dir={}",
+        src_dir.join("lib").to_str().unwrap()
+    );
+    println!(
+        "cargo:rustc-link-search=native={}",
         src_dir.join("lib").to_str().unwrap()
     );
     // Link Flags
-    println!("cargo:rustc-link-lib=rmg5",);
-    println!("cargo:rustc-link-lib=model_sm_ma",);
+    println!("cargo:rustc-link-lib=static=rmg5",);
+    println!("cargo:rustc-link-lib=static=model_sm_ma",);
 
-    println!(
-        "cargo:rustc-link-arg=-Wl,-rpath,{}",
-        src_dir.join("lib/").to_str().unwrap()
-    );
+    //println!(
+    //    "cargo:rustc-link-arg=-Wl,-rpath,{}",
+    //    src_dir.join("lib/").to_str().unwrap()
+    //);
 
     // Update envoiraments paths
     //println!(
@@ -182,7 +186,7 @@ fn make_library(env: &Environment) {
             "-e",
             format!("MG5={}", env.mg5_bin.to_str().unwrap()).as_str(),
             "all",
-            "lib/librmg5.so",
+            "lib/librmg5.a",
             "lib/libmodel_sm_ma.a",
         ])
         .stdout(Stdio::inherit()) // Inherit stdout (print directly)
