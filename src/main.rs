@@ -3,6 +3,7 @@ use rand::Rng;
 use std::time::{Duration, Instant};
 
 use rust_mg5::uux_aag::RustMG5;
+use rust_mg5::MG5Integrand;
 
 /// Benchmarking Function for the estimation of the evaluation time
 /// for a given number of evaluation it returns the mean execution time

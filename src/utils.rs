@@ -20,9 +20,9 @@ macro_rules! rmg5 {
                 }
             }
         }
-        impl RustMG5 {
+        impl crate::MG5Integrand for RustMG5 {
             /// Initialise integrand with the parameter card
-            pub fn init(card_path: &str) -> Self {
+            fn init(card_path: &str) -> Self {
                 let mut mg5_integrand = ffi::new_mg5_integrand();
                 // At the moment only a single process is supported
                 assert!(mg5_integrand.nprocesses() == 1);
@@ -43,7 +43,7 @@ macro_rules! rmg5 {
             }
 
             /// Set integrand with the parameter card
-            pub fn set_card(&mut self, card_path: &str) {
+            fn set_card(&mut self, card_path: &str) {
                 // Import Parameter Card
                 assert!(
                     std::path::Path::new(card_path).exists(),
@@ -58,7 +58,7 @@ macro_rules! rmg5 {
             }
 
             /// Set momenta for the evaluation
-            pub fn set_externals(&mut self, flatten_moms: &[f64]) {
+            fn set_externals(&mut self, flatten_moms: &[f64]) {
                 // Flatten data
                 unsafe {
                     self.integrand
@@ -69,30 +69,30 @@ macro_rules! rmg5 {
             }
 
             /// Evaluate matrix element
-            pub fn evaluate(&mut self) -> f64 {
+            fn evaluate(&mut self) -> f64 {
                 assert!(self.initialized, "Set Parameter Card before evaluating");
                 self.integrand.as_mut().unwrap().get_matrix_element()
             }
 
             /// Get number of external momenta
-            pub fn n_externals(&self) -> usize {
+            fn n_externals(&self) -> usize {
                 self.integrand.nexternal()
             }
             /// Get number of initial momenta
-            pub fn n_initials(&self) -> usize {
+            fn n_initials(&self) -> usize {
                 self.integrand.ninitial()
             }
             /// Get number of processes
-            pub fn n_processes(&self) -> usize {
+            fn n_processes(&self) -> usize {
                 self.integrand.nprocesses()
             }
             /// Get process name
-            pub fn name(&self) -> String {
+            fn name(&self) -> String {
                 self.integrand.get_name().to_string()
             }
 
             /// Obtain CPP stdout string
-            pub fn cout(&mut self) -> String {
+            fn cout(&mut self) -> String {
                 self.integrand.as_mut().unwrap().read_cout().to_string()
             }
         }
