@@ -3,6 +3,7 @@ Bridge MadGraph standalone library to be used directly in rust
 
 ## Dependencies
  - [MadGraph5_aMC@NLO](https://launchpad.net/mg5amcnlo)
+ - [cxx](https://docs.rs/cxx/latest/cxx/)
  - python3
  - `cxx` crate for rust
 
