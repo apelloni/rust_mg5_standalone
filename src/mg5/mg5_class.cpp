@@ -17,16 +17,23 @@ MG5Integrand::MG5Integrand() {
   old = std::cout.rdbuf(buffer.rdbuf());
 }
 
+// Deconstructor
+MG5Integrand::~MG5Integrand() {
+  for (int i = 0; i < process.nexternal; i++) {
+    free(p[i]);
+  }
+}
+
 // Initialise process with corresponding process_card
 void MG5Integrand::init(const char *card_path) {
   // Create CPPProcess and set card parameters
   process = _CPPProcess();
   name = process.name();
-  //printf("%s\n", card_path);
+  // printf("%s\n", card_path);
   process.initProc(card_path);
   // p.swap(std::vector<double *>(process.nexternal, {0.0, 0.0, 0.0, 0.0}))
   for (int i = 0; i < process.nexternal; i++) {
-    double *pn = (double *)malloc(4 * sizeof(double));
+    double *pn = (double *)malloc(400 * sizeof(double));
     p.push_back(pn);
   }
 }

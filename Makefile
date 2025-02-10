@@ -27,14 +27,14 @@ lib/libmodel_sm_ma.a:
 $(PROCESSES_DIR):
 	./.venv/bin/python $(MG5) cards/$@.mg5
 
-src/cpp/mg5_%.o: src/mg5_class.cpp $(PROCESSES_DIR) src/cpp/CPP_%.h  $(sources)
+src/cpp/mg5_%.o: src/mg5/mg5_class.cpp $(PROCESSES_DIR) src/cpp/CPP_%.h  $(sources)
 	mkdir -p src/cpp/
 	sed -e "s/MG5_NAMESPACE/MG5_$*/g" \
 		-e "s/mg5_class.h/mg5_$*.h/" \
-		-e "s/_CPPProcess/CPP_$*/" src/mg5_class.cpp > src/cpp/mg5_$*.cpp
+		-e "s/_CPPProcess/CPP_$*/" src/mg5/mg5_class.cpp > src/cpp/mg5_$*.cpp
 	sed -e "s/MG5_NAMESPACE/MG5_$*/g" \
 		-e "s/CPPProcess.h/CPP_$*.h/" \
-		-e "s/_CPPProcess/CPP_$*/" src/mg5_class.h > src/cpp/mg5_$*.h
+		-e "s/_CPPProcess/CPP_$*/" src/mg5/mg5_class.h > src/cpp/mg5_$*.h
 	$(CC) -o $@ -c src/cpp/mg5_$*.cpp -fPIC -Isrc/
 
 
