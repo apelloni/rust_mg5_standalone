@@ -50,6 +50,7 @@ src/cpp/CPP_%.h:
 	sed -i "s/CPPProcess\([^.]\)/CPP_$*\1/g" $(CPP_DIR)/CPPProcess.cc
 	sed -i "s/CPPProcess/CPP_$*/g" $(CPP_DIR)/CPPProcess.h
 	cp ./$(PROCESSES_DIR)/SubProcesses/P*_Sigma_$*/CPPProcess.h $@
+	sed -i "/private:/i\    Parameters_sm_ma * get_pars() const {return pars;}\n" $@
 
  $(sources):
 	mkdir -p src/cpp/

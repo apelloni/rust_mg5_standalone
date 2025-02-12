@@ -3,7 +3,7 @@ use rand::Rng;
 use std::time::{Duration, Instant};
 
 use rust_mg5::uux_aag::RustMG5;
-use rust_mg5::MG5Integrand;
+use rust_mg5::{MG5Integrand, MG5Parameters};
 
 /// Benchmarking Function for the estimation of the evaluation time
 /// for a given number of evaluation it returns the mean execution time
@@ -41,7 +41,7 @@ where
 fn main() {
     // Initialize MG5
     let card_path = "./standalone_sm_ma/Cards/param_card.dat";
-    let mut mg5_integrand= RustMG5::init(card_path);
+    let mut mg5_integrand = RustMG5::init(card_path);
     //println!("====\n{}====\n",mg5_integrand.cout());
 
     // Set Momenta
@@ -64,7 +64,7 @@ fn main() {
     /* ============================================
      * START Benchmark
      * ============================================*/
-    let n_samples = 100000;
+    let n_samples = 10000;
     let dimensions = 4 * mg5_integrand.n_externals();
 
     // Set random number generator
@@ -87,4 +87,8 @@ fn main() {
     println!("{}: {}", "Evaluation time".bold(), time_str.green());
     print!("{}: ", "Last result".bold());
     println!("{}", res);
+
+    println!("{}", mg5_integrand.cout());
+
+    println!("as = {}", mg5_integrand.aS());
 }

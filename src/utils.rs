@@ -126,5 +126,182 @@ macro_rules! rmg5 {
                 self.integrand.as_mut().unwrap().read_cout().to_string()
             }
         }
+
+        /// Model Parameters
+        impl crate::MG5Parameters for RustMG5 {
+            // Obtain model parameters independent of aS
+            fn mdl_WH(&self) -> f64 {
+                self.integrand.get_mdl_WH()
+            }
+            fn mdl_WW(&self) -> f64 {
+                self.integrand.get_mdl_WW()
+            }
+            fn mdl_WZ(&self) -> f64 {
+                self.integrand.get_mdl_WZ()
+            }
+            fn mdl_WT(&self) -> f64 {
+                self.integrand.get_mdl_WT()
+            }
+            fn mdl_ymtau(&self) -> f64 {
+                self.integrand.get_mdl_ymtau()
+            }
+            fn mdl_ymt(&self) -> f64 {
+                self.integrand.get_mdl_ymt()
+            }
+            fn mdl_ymb(&self) -> f64 {
+                self.integrand.get_mdl_ymb()
+            }
+            fn aS(&self) -> f64 {
+                self.integrand.get_aS()
+            }
+            fn mdl_Gf(&self) -> f64 {
+                self.integrand.get_mdl_Gf()
+            }
+            fn aEWM1(&self) -> f64 {
+                self.integrand.get_aEWM1()
+            }
+            fn mdl_MH(&self) -> f64 {
+                self.integrand.get_mdl_MH()
+            }
+            fn mdl_MZ(&self) -> f64 {
+                self.integrand.get_mdl_MZ()
+            }
+            fn mdl_MTA(&self) -> f64 {
+                self.integrand.get_mdl_MTA()
+            }
+            fn mdl_MT(&self) -> f64 {
+                self.integrand.get_mdl_MT()
+            }
+            fn mdl_MB(&self) -> f64 {
+                self.integrand.get_mdl_MB()
+            }
+            fn mdl_CKM3x3(&self) -> f64 {
+                self.integrand.get_mdl_CKM3x3()
+            }
+            fn mdl_conjg_CKM1x1(&self) -> f64 {
+                self.integrand.get_mdl_conjg_CKM1x1()
+            }
+            fn mdl_conjg_CKM3x3(&self) -> f64 {
+                self.integrand.get_mdl_conjg_CKM3x3()
+            }
+            fn mdl_MZ_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_MZ_exp_2()
+            }
+            fn mdl_MZ_exp_4(&self) -> f64 {
+                self.integrand.get_mdl_MZ_exp_4()
+            }
+            fn mdl_sqrt_2(&self) -> f64 {
+                self.integrand.get_mdl_sqrt_2()
+            }
+            fn mdl_MH_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_MH_exp_2()
+            }
+            fn mdl_aEW(&self) -> f64 {
+                self.integrand.get_mdl_aEW()
+            }
+            fn mdl_MW(&self) -> f64 {
+                self.integrand.get_mdl_MW()
+            }
+            fn mdl_sqrt_aEW(&self) -> f64 {
+                self.integrand.get_mdl_sqrt_aEW()
+            }
+            fn mdl_ee(&self) -> f64 {
+                self.integrand.get_mdl_ee()
+            }
+            fn mdl_MW_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_MW_exp_2()
+            }
+            fn mdl_sw2(&self) -> f64 {
+                self.integrand.get_mdl_sw2()
+            }
+            fn mdl_cw(&self) -> f64 {
+                self.integrand.get_mdl_cw()
+            }
+            fn mdl_sqrt_sw2(&self) -> f64 {
+                self.integrand.get_mdl_sqrt_sw2()
+            }
+            fn mdl_sw(&self) -> f64 {
+                self.integrand.get_mdl_sw()
+            }
+            fn mdl_g1(&self) -> f64 {
+                self.integrand.get_mdl_g1()
+            }
+            fn mdl_gw(&self) -> f64 {
+                self.integrand.get_mdl_gw()
+            }
+            fn mdl_vev(&self) -> f64 {
+                self.integrand.get_mdl_vev()
+            }
+            fn mdl_vev_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_vev_exp_2()
+            }
+            fn mdl_lam(&self) -> f64 {
+                self.integrand.get_mdl_lam()
+            }
+            fn mdl_yb(&self) -> f64 {
+                self.integrand.get_mdl_yb()
+            }
+            fn mdl_yt(&self) -> f64 {
+                self.integrand.get_mdl_yt()
+            }
+            fn mdl_ytau(&self) -> f64 {
+                self.integrand.get_mdl_ytau()
+            }
+            fn mdl_muH(&self) -> f64 {
+                self.integrand.get_mdl_muH()
+            }
+            fn mdl_ee_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_ee_exp_2()
+            }
+            fn mdl_sw_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_sw_exp_2()
+            }
+            fn mdl_cw_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_cw_exp_2()
+            }
+            fn mdl_complexi(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_mdl_complexi();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+            fn mdl_I1x33(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_mdl_I1x33();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+            fn mdl_I2x33(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_mdl_I2x33();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+            fn mdl_I3x33(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_mdl_I3x33();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+            fn mdl_I4x33(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_mdl_I4x33();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+
+            // Model parameters dependent on aS
+            fn mdl_sqrt_aS(&self) -> f64 {
+                self.integrand.get_mdl_sqrt_aS()
+            }
+            fn G(&self) -> f64 {
+                self.integrand.get_G()
+            }
+            fn mdl_G_exp_2(&self) -> f64 {
+                self.integrand.get_mdl_G_exp_2()
+            }
+
+            // Model couplings independent of aS
+            fn GC_2(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_GC_2();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+
+            // Model couplings dependent on aS
+            fn GC_11(&mut self) -> num::Complex<f64> {
+                let v = self.integrand.as_mut().unwrap().get_GC_11();
+                num::Complex::new(*v.get(0).unwrap(), *v.get(1).unwrap())
+            }
+        }
     };
 }

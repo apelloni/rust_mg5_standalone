@@ -8,19 +8,19 @@
 #ifndef Parameters_sm_ma_H
 #define Parameters_sm_ma_H
 
-#include <complex> 
+#include <complex>
 
 #include "read_slha.h"
-using namespace std; 
+using namespace std;
 
 class Parameters_sm_ma
 {
   public:
 
-    static Parameters_sm_ma * getInstance(); 
+    static Parameters_sm_ma * getInstance();
 
     // Define "zero"
-    double zero, ZERO; 
+    double zero, ZERO;
     // Model parameters independent of aS
     double mdl_WH, mdl_WW, mdl_WZ, mdl_WT, mdl_ymtau, mdl_ymt, mdl_ymb, aS,
         mdl_Gf, aEWM1, mdl_MH, mdl_MZ, mdl_MTA, mdl_MT, mdl_MB, mdl_CKM3x3,
@@ -32,34 +32,33 @@ class Parameters_sm_ma
     std::complex<double> mdl_complexi, mdl_I1x33, mdl_I2x33, mdl_I3x33,
         mdl_I4x33;
     // Model parameters dependent on aS
-    double mdl_sqrt__aS, G, mdl_G__exp__2; 
+    double mdl_sqrt__aS, G, mdl_G__exp__2;
     // Model couplings independent of aS
-    std::complex<double> GC_2; 
+    std::complex<double> GC_2;
     // Model couplings dependent on aS
-    std::complex<double> GC_11; 
+    std::complex<double> GC_11;
 
     // Set parameters that are unchanged during the run
-    void setIndependentParameters(SLHAReader& slha); 
+    void setIndependentParameters(SLHAReader& slha);
     // Set couplings that are unchanged during the run
-    void setIndependentCouplings(); 
+    void setIndependentCouplings();
     // Set parameters that are changed event by event
-    void setDependentParameters(); 
+    void setDependentParameters();
     // Set couplings that are changed event by event
-    void setDependentCouplings(); 
+    void setDependentCouplings();
 
     // Print parameters that are unchanged during the run
-    void printIndependentParameters(); 
+    void printIndependentParameters();
     // Print couplings that are unchanged during the run
-    void printIndependentCouplings(); 
+    void printIndependentCouplings();
     // Print parameters that are changed event by event
-    void printDependentParameters(); 
+    void printDependentParameters();
     // Print couplings that are changed event by event
-    void printDependentCouplings(); 
+    void printDependentCouplings();
 
 
   private:
-    static Parameters_sm_ma * instance; 
-}; 
+    static Parameters_sm_ma * instance;
+};
 
 #endif  // Parameters_sm_ma_H
-
