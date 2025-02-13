@@ -1,3 +1,12 @@
+use once_cell::sync::Lazy;
+use std::sync::Mutex;
+
+/// Global lock for the initialization of the integrand
+/// inside MG5 Processes the parameters are shared as a reference with
+/// the instance create only once.
+/// To avoid concurrency problems we can use a lock when initializing the integrand
+static GLOBAL_LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+
 #[macro_use]
 mod utils;
 

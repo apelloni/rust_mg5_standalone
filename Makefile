@@ -3,7 +3,7 @@ CC=g++ -O3
 MG5=/home/andrea/Programs/MG5_aMC_v3_5_4/bin/mg5_aMC
 
 MODEL=sm_ma
-PROCESSES=sm_ma_uux_aa sm_ma_uux_aag sm_ma_uux_aaddx
+PROCESSES=sm_ma_uux_aa sm_ma_uux_aag sm_ma_uux_aaddx sm_ma_uux_ddx
 PROCESSES_DIR=standalone_sm_ma
 
 sources=src/cpp/Parameters_sm_ma.h src/cpp/read_slha.h
@@ -24,8 +24,8 @@ lib/librmg5.a: $(patsubst %, src/cpp/mg5_%.o, $(PROCESSES))
 lib/libmodel_sm_ma.a:
 	ln -sf ./../$(PROCESSES_DIR)/lib/libmodel_sm_ma.a $@
 
-$(PROCESSES_DIR):
-	./.venv/bin/python $(MG5) cards/$@.mg5
+#$(PROCESSES_DIR):
+#	./.venv/bin/python $(MG5) cards/$@.mg5
 
 src/cpp/mg5_%.o: src/mg5/mg5_class.cpp $(PROCESSES_DIR) src/cpp/CPP_%.h  $(sources)
 	mkdir -p src/cpp/

@@ -36,7 +36,7 @@ void MG5Integrand::init(const char *card_path) {
   parameters = process.get_pars();
   // p.swap(std::vector<double *>(process.nexternal, {0.0, 0.0, 0.0, 0.0}))
   for (int i = 0; i < process.nexternal; i++) {
-    double *pn = (double *)malloc(400 * sizeof(double));
+    double *pn = (double *)malloc(4 * sizeof(double));
     p.push_back(pn);
   }
 }

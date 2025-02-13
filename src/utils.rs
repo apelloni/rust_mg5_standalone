@@ -44,6 +44,9 @@ macro_rules! rmg5 {
         impl crate::MG5Integrand for RustMG5 {
             /// Initialise integrand with the parameter card
             fn init(card_path: &str) -> Self {
+                // Lock function for the internal initialization of Prameters
+                let _lock = crate::GLOBAL_LOCK.lock().unwrap();
+
                 let mut mg5_integrand = ffi::new_mg5_integrand();
                 // At the moment only a single process is supported
                 assert!(mg5_integrand.nprocesses() == 1);
@@ -66,6 +69,9 @@ macro_rules! rmg5 {
 
             /// Set integrand with the parameter card
             fn set_card(&mut self, card_path: &str) {
+                // Lock function for the internal initialization of Prameters
+                let _lock = crate::GLOBAL_LOCK.lock().unwrap();
+
                 // Import Parameter Card
                 assert!(
                     std::path::Path::new(card_path).exists(),
