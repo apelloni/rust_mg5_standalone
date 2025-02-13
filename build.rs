@@ -70,6 +70,13 @@ fn main() -> Result<(), std::io::Error> {
         .opt_level(3)
         .compile("rmg5-uux_aaddx");
 
+    // Bridge CPP standalone to Rust
+    cxx_build::bridge("src/uux_ddx.rs")
+        .include("./src/")
+        .opt_level(3)
+        .compile("rmg5-uux_ddx");
+
+
     // Link libraries
     println!("cargo:rerun-if-changed=./lib/libmd5_class.a");
     println!("cargo:rerun-if-changed=./lib/libmodel_sm_ma.a");
